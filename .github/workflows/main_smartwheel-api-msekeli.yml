@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - smartwheel-api-msekeli
+name: Build and deploy ASP.NET Core app to Azure Web App - smartwheel-api-msekeli
 
 on:
   push:
@@ -18,16 +18,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "9.x"
 
       # Publish ONLY the API project (Clean Architecture)
-      - name: Publish API project
-        run: dotnet publish src/SmartWheel.Api/SmartWheel.Api.csproj -c Release -o ${{ env.DOTNET_ROOT }}/myapp
+      - name: Publish SmartWheel API
+        run: dotnet publish SmartWheel.Api/SmartWheel.Api.csproj -c Release -o ${{ env.DOTNET_ROOT }}/myapp
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
@@ -41,7 +41,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: .net-app
@@ -54,7 +54,6 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F905BF0D93B2403392D8AFF92C431328 }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: "smartwheel-api-msekeli"
