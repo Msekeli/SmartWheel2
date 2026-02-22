@@ -35,11 +35,16 @@ jobs:
       - name: Verify publish output
         run: ls -R publish
 
+      - name: Zip publish output
+        run: |
+          cd publish
+          zip -r ../app.zip .
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: app
-          path: publish
+          path: app.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,7 +55,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: app
-          path: publish
+          path: .
 
       - name: Azure Login
         uses: azure/login@v2
@@ -59,8 +64,8 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A60B332C0EC742D698500F972DF11CC5 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F905BF0D93B2403392D8AFF92C431328 }}
 
-      - name: Deploy
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: smartwheel-api-msekeli
-          package: publish
+          package: app.zip
