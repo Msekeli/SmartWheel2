@@ -36,11 +36,8 @@ builder.Services.AddScoped<GetStatusUseCase>();
 var app = builder.Build();
 
 //Swagger Middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //Test Endpoint with Swagger 
 app.MapGet("/", () => "SmartWheel API is running!");
