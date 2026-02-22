@@ -41,6 +41,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          path: ./.net-app
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -54,4 +55,4 @@ jobs:
         with:
           app-name: "smartwheel-api-msekeli"
           slot-name: "Production"
-          package: ./publish
+          package: ./.net-app
