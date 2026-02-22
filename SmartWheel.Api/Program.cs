@@ -8,6 +8,9 @@ using SmartWheel.Infrastructure.Services;
 using SmartWheel.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+// Ensure the Data directory exists
+var dataPath = Path.Combine(builder.Environment.ContentRootPath, "Data");
+Directory.CreateDirectory(dataPath);
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
