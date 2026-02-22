@@ -55,4 +55,4 @@ jobs:
         with:
           app-name: "smartwheel-api-msekeli"
           slot-name: "Production"
-          package: ./.net-app
+          package: ./.net-app/publish
