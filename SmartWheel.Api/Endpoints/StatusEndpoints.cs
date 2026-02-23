@@ -14,13 +14,16 @@ public static class StatusEndpoints
         {
             var result = await useCase.ExecuteAsync(userId, cancellationToken);
 
-            return Results.Ok(new StatusResponse
+            var response = new StatusResponse
             {
                 Balance = result.Balance,
                 CanSpin = result.CanSpin
-            });
+            };
+
+            return Results.Ok(response);
         })
         .WithName("GetStatus")
+        .Produces<StatusResponse>(StatusCodes.Status200OK)
         .WithOpenApi();
 
         return app;

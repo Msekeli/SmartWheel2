@@ -2,8 +2,6 @@ using SmartWheel.Application.DTOs;
 using SmartWheel.Application.UseCases;
 using SmartWheel.Api.Contracts;
 
-namespace SmartWheel.Api.Endpoints;
-
 public static class SpinEndpoints
 {
     public static IEndpointRouteBuilder MapSpinEndpoints(this IEndpointRouteBuilder app)
@@ -21,14 +19,17 @@ public static class SpinEndpoints
 
             var result = await useCase.ExecuteAsync(command, cancellationToken);
 
-            return Results.Ok(new SpinResponse
+            var response = new SpinResponse
             {
                 Score = result.Score,
                 PrizeAmount = result.PrizeAmount,
                 WheelIndex = result.WheelIndex
-            });
+            };
+
+            return Results.Ok(response);
         })
         .WithName("ProcessSpin")
+        .Produces<SpinResponse>(StatusCodes.Status200OK)
         .WithOpenApi();
 
         return app;
