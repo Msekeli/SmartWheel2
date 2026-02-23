@@ -1,11 +1,14 @@
 import { Wheel } from "react-custom-roulette";
 import { useState } from "react";
+import { spinWheel } from "../services/smartWheelApi";
 import "../styles/wheel.css";
 
 function RouletteWheel() {
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeIndex, setPrizeIndex] = useState(0);
+  const [winningAmount, setWinningAmount] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const data = [
     { option: "No Prize" },
@@ -16,27 +19,52 @@ function RouletteWheel() {
     { option: "R100" },
   ];
 
-  const handleSpinClick = () => {
-    const randomIndex = Math.floor(Math.random() * data.length);
-    setPrizeIndex(randomIndex);
-    setMustSpin(true);
+  const handleSpinClick = async () => {
+    if (mustSpin || isLoading) return;
+
+    try {
+      setIsLoading(true);
+
+      // TEMP user + answers (replace later with real input)
+      const userId = "00000000-0000-0000-0000-000000000001";
+      const answers = ["echo", "shadow", "time", "fire", "water"];
+
+      const result = await spinWheel(userId, answers);
+
+      // Backend controls everything
+      setPrizeIndex(result.wheelIndex);
+      setWinningAmount(result.prizeAmount);
+
+      setMustSpin(true);
+    } catch (error) {
+      console.error("Spin error:", error);
+      alert("Something went wrong while spinning.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleStop = () => {
     setMustSpin(false);
-    setShowModal(true);
+
+    // Small dramatic pause
+    setTimeout(() => {
+      setShowModal(true);
+    }, 600);
   };
 
   return (
     <div className="wheel-section">
       <div className="wheel-wrapper">
-        <div className={`wheel-glow ${mustSpin ? "spinning" : ""}`}></div>
+        <div className="wheel-glow"></div>
         <div className="custom-pointer"></div>
 
         <Wheel
           mustStartSpinning={mustSpin}
           prizeNumber={prizeIndex}
           data={data}
+          startingOptionIndex={data.length - 1}
+          spinDuration={0.6}
           onStopSpinning={handleStop}
           backgroundColors={[
             "#7c3aed",
@@ -60,10 +88,10 @@ function RouletteWheel() {
 
       <button
         onClick={handleSpinClick}
-        disabled={mustSpin}
+        disabled={mustSpin || isLoading}
         className="spin-button"
       >
-        Spin the Wheel
+        {isLoading ? "Processing..." : "Spin the Wheel"}
       </button>
 
       {showModal && (
@@ -71,7 +99,7 @@ function RouletteWheel() {
           <div className="modal-card">
             <div className="modal-title">🎉 Congratulations!</div>
             <div>
-              You’ve won <strong>{data[prizeIndex].option}</strong>
+              You’ve won <strong>R{winningAmount}</strong>
             </div>
             <button
               className="modal-button"
