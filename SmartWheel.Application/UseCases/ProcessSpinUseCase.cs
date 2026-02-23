@@ -12,6 +12,7 @@ public sealed class ProcessSpinUseCase
     private readonly IScoreCalculator _scoreCalculator;
     private readonly IPrizeCalculator _prizeCalculator;
 
+    
     public ProcessSpinUseCase(
         IUserRepository userRepository,
         ISpinHistoryRepository spinHistoryRepository,
@@ -28,6 +29,16 @@ public sealed class ProcessSpinUseCase
         SpinCommand command,
         CancellationToken cancellationToken = default)
     {
+          // 🔎 TEMP DEBUG START
+    if (command.Answers == null)
+        throw new Exception("Answers are NULL");
+
+    Console.WriteLine("Answers received:");
+    foreach (var a in command.Answers)
+    {
+        Console.WriteLine($"- {a}");
+    }
+    // 🔎 TEMP DEBUG END
         var user = await _userRepository.GetByIdAsync(command.UserId, cancellationToken);
 
         if (user is null)
