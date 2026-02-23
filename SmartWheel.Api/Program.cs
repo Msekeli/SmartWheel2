@@ -92,6 +92,9 @@ app.MapPost("/debug/create-user", async (SmartWheelDbContext db) =>
         user.Id,
         Message = "User created successfully"
     });
-});
+})
+.WithName("CreateDebugUser")
+.Produces(StatusCodes.Status200OK)
+.WithOpenApi();
 
 app.Run();
