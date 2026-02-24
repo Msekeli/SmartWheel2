@@ -61,6 +61,11 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 //
+// ✅ ACTIVATE CORS HERE
+//
+app.UseCors("AllowFrontend");
+
+//
 // Apply Migrations Automatically
 //
 using (var scope = app.Services.CreateScope())
