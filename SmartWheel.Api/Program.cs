@@ -45,6 +45,19 @@ builder.Services.AddScoped<GetOrCreateUserByEmailUseCase>();
 builder.Services.AddScoped<ProcessSpinUseCase>();
 builder.Services.AddScoped<GetStatusUseCase>();
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 //
