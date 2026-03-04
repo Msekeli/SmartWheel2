@@ -35,3 +35,13 @@ export async function spinWheel(userId, answers) {
 
   return await response.json();
 }
+
+export async function getStatus(userId) {
+  const response = await fetch(`${BASE_URL}/status/${userId}`);
+
+  if (!response.ok) {
+    throw new Error("Status fetch failed");
+  }
+
+  return await response.json();
+}

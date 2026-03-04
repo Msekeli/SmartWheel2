@@ -1,0 +1,47 @@
+[
+  {
+    "question": "I speak without a mouth and hear without ears.",
+    "options": [
+      { "label": "Echo", "value": "echo" },
+      { "label": "Wind", "value": "wind" },
+      { "label": "Shadow", "value": "shadow" },
+      { "label": "Whistle", "value": "whistle" }
+    ]
+  },
+  {
+    "question": "I follow you everywhere but disappear in the dark.",
+    "options": [
+      { "label": "Shadow", "value": "shadow" },
+      { "label": "Smoke", "value": "smoke" },
+      { "label": "Wind", "value": "wind" },
+      { "label": "Reflection", "value": "reflection" }
+    ]
+  },
+  {
+    "question": "I fly without wings and cry without eyes.",
+    "options": [
+      { "label": "Time", "value": "time" },
+      { "label": "Rain", "value": "rain" },
+      { "label": "Cloud", "value": "cloud" },
+      { "label": "Wind", "value": "wind" }
+    ]
+  },
+  {
+    "question": "I am not alive, but I grow. I don't have lungs, but I need air.",
+    "options": [
+      { "label": "Fire", "value": "fire" },
+      { "label": "Wind", "value": "wind" },
+      { "label": "Smoke", "value": "smoke" },
+      { "label": "Heat", "value": "heat" }
+    ]
+  },
+  {
+    "question": "I can run but never walk.",
+    "options": [
+      { "label": "Water", "value": "water" },
+      { "label": "Shadow", "value": "shadow" },
+      { "label": "Sand", "value": "sand" },
+      { "label": "Wind", "value": "wind" }
+    ]
+  }
+]

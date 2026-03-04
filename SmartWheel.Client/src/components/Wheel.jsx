@@ -25,6 +25,8 @@ function RouletteWheel({
     <div className="wheel-section">
       <div className="wheel-wrapper">
         <div className="wheel-glow"></div>
+
+        {/* Custom pointer */}
         <div className="custom-pointer"></div>
 
         <Wheel

@@ -1,0 +1,38 @@
+.question-text {
+  font-weight: 600;
+  margin: 20px 0;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.option-button {
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #7c3aed;
+  background: white;
+}
+
+.option-button.selected {
+  background: #7c3aed;
+  color: white;
+}
+
+.next-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #eee;
+}
+
+.progress-fill {
+  height: 6px;
+  background: #7c3aed;
+}

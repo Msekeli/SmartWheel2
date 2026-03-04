@@ -2,19 +2,36 @@ import { useState } from "react";
 import RouletteWheel from "./Wheel";
 import EmailModal from "./EmailModal";
 import RiddleModal from "./RiddleModal";
-import { resolveIdentity, spinWheel } from "../services/smartWheelApi";
+import PrizeModal from "./PrizeModal";
+import MessageModal from "./MessageModal";
+
+import {
+  resolveIdentity,
+  spinWheel,
+  getStatus,
+} from "../services/smartWheelApi";
 
 function SmartWheelLogic() {
   const [userId, setUserId] = useState(null);
-  const [, setBalance] = useState(0);
+  const [_balance, setBalance] = useState(0);
   const [canSpin, setCanSpin] = useState(false);
 
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showRiddleModal, setShowRiddleModal] = useState(false);
+  const [showPrizeModal, setShowPrizeModal] = useState(false);
 
   const [spinResult, setSpinResult] = useState(null);
   const [shouldSpin, setShouldSpin] = useState(false);
+  const [prizeAmount, setPrizeAmount] = useState(null);
+
+  const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const resetSpinState = () => {
+    setSpinResult(null);
+    setPrizeAmount(null);
+    setShouldSpin(false);
+  };
 
   const handleSpinClick = () => {
     if (!userId) {
@@ -23,18 +40,16 @@ function SmartWheelLogic() {
     }
 
     if (!canSpin) {
-      alert("You already spun today.");
+      setMessage("⏳ You already spun today. Please come back tomorrow.");
       return;
     }
 
-    // If we already have backend result → start animation
-    if (spinResult) {
-      setShouldSpin(true);
+    if (!spinResult) {
+      setShowRiddleModal(true);
       return;
     }
 
-    // Otherwise open riddles
-    setShowRiddleModal(true);
+    setShouldSpin(true);
   };
 
   const handleEmailSubmit = async (email) => {
@@ -49,8 +64,8 @@ function SmartWheelLogic() {
 
       setShowEmailModal(false);
     } catch (error) {
-      console.error("Identity error:", error);
-      alert("Failed to resolve user.");
+      console.error(error);
+      setMessage("⚠️ Failed to verify email. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -63,19 +78,31 @@ function SmartWheelLogic() {
       const result = await spinWheel(userId, answers);
 
       setSpinResult(result);
+      setPrizeAmount(result.prizeAmount);
+
       setShowRiddleModal(false);
-      // setShouldSpin(true);
+
+      setMessage("🧠 Great! Click Spin to reveal your prize.");
     } catch (error) {
-      console.error("Spin error:", error);
-      alert("Spin failed.");
+      console.error(error);
+      setMessage("⚠️ Something went wrong while spinning.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSpinComplete = () => {
+  const handleSpinComplete = async () => {
     setShouldSpin(false);
-    setSpinResult(null); // prevent re-spin without new riddles
+    setShowPrizeModal(true);
+
+    try {
+      const status = await getStatus(userId);
+
+      setBalance(status.balance);
+      setCanSpin(status.canSpin);
+    } catch (error) {
+      console.error("Status refresh failed", error);
+    }
   };
 
   return (
@@ -101,6 +128,20 @@ function SmartWheelLogic() {
           onClose={() => setShowRiddleModal(false)}
           isLoading={isLoading}
         />
+      )}
+
+      {showPrizeModal && (
+        <PrizeModal
+          prizeAmount={prizeAmount}
+          onClose={() => {
+            setShowPrizeModal(false);
+            resetSpinState();
+          }}
+        />
+      )}
+
+      {message && (
+        <MessageModal message={message} onClose={() => setMessage(null)} />
       )}
     </>
   );

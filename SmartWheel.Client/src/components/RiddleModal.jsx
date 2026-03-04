@@ -1,41 +1,20 @@
 import { useState } from "react";
+import quiz from "../data/quiz.json";
 
 function RiddleModal({ onSubmit, onClose, isLoading }) {
-  const riddles = [
-    {
-      question: "I speak without a mouth and hear without ears. What am I?",
-      options: ["Echo", "Wind", "Shadow", "Whistle"],
-    },
-    {
-      question: "What has keys but can't open locks?",
-      options: ["Keyboard", "Piano", "Treasure chest", "Car"],
-    },
-    {
-      question: "What has hands but cannot clap?",
-      options: ["Clock", "Robot", "Statue", "Tree"],
-    },
-    {
-      question: "What gets wetter the more it dries?",
-      options: ["Towel", "Sponge", "Rain", "Soap"],
-    },
-    {
-      question: "What has a neck but no head?",
-      options: ["Bottle", "Shirt", "Guitar", "River"],
-    },
-  ];
+  const riddles = quiz;
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(Array(riddles.length).fill(null));
 
   const handleSelect = (option) => {
     const updated = [...answers];
-    updated[currentQuestion] = option;
+    updated[currentQuestion] = option.value;
     setAnswers(updated);
   };
 
   const handleNext = () => {
     if (answers[currentQuestion] === null) {
-      alert("Please select an answer");
       return;
     }
 
@@ -50,8 +29,8 @@ function RiddleModal({ onSubmit, onClose, isLoading }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-card">
-        <h2>
+      <div className="modal-card riddle-card">
+        <h2 className="modal-title">
           Riddle {currentQuestion + 1} / {riddles.length}
         </h2>
 
@@ -72,11 +51,11 @@ function RiddleModal({ onSubmit, onClose, isLoading }) {
               key={index}
               type="button"
               className={`option-button ${
-                answers[currentQuestion] === option ? "selected" : ""
+                answers[currentQuestion] === option.value ? "selected" : ""
               }`}
               onClick={() => handleSelect(option)}
             >
-              {option}
+              {option.label}
             </button>
           ))}
         </div>
@@ -84,12 +63,12 @@ function RiddleModal({ onSubmit, onClose, isLoading }) {
         <button
           className="next-button"
           onClick={handleNext}
-          disabled={isLoading}
+          disabled={isLoading || answers[currentQuestion] === null}
         >
           {currentQuestion === riddles.length - 1
             ? isLoading
               ? "Submitting..."
-              : "Submit"
+              : "Submit Answers"
             : "Next"}
         </button>
 
