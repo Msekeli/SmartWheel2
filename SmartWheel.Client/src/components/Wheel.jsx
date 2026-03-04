@@ -1,7 +1,12 @@
 import { Wheel } from "react-custom-roulette";
 import "../styles/wheel.css";
 
-function RouletteWheel({ onSpinClick }) {
+function RouletteWheel({
+  onSpinClick,
+  shouldSpin,
+  spinResult,
+  onSpinComplete,
+}) {
   const data = [
     { option: "No Prize" },
     { option: "R5" },
@@ -11,6 +16,11 @@ function RouletteWheel({ onSpinClick }) {
     { option: "R100" },
   ];
 
+  const safeIndex =
+    spinResult && spinResult.wheelIndex < data.length
+      ? spinResult.wheelIndex
+      : 0;
+
   return (
     <div className="wheel-section">
       <div className="wheel-wrapper">
@@ -18,11 +28,11 @@ function RouletteWheel({ onSpinClick }) {
         <div className="custom-pointer"></div>
 
         <Wheel
-          mustStartSpinning={false}
-          prizeNumber={0}
+          mustStartSpinning={shouldSpin}
+          prizeNumber={safeIndex}
+          onStopSpinning={onSpinComplete}
           data={data}
-          startingOptionIndex={data.length - 1}
-          spinDuration={0.6}
+          spinDuration={2}
           backgroundColors={[
             "#7c3aed",
             "#38bdf8",

@@ -181,3 +181,163 @@
   font-weight: bold;
   cursor: pointer;
 }
+.question-text {
+  font-weight: 600;
+  margin: 20px 0;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.option-button {
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #7c3aed;
+  background: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.option-button:hover {
+  background: #f3f4f6;
+}
+
+/* selected answer */
+.option-button.selected {
+  background: #7c3aed;
+  color: white;
+  border-color: #d4af37;
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
+}
+
+/* reveal answer when selected */
+.option-button.selected {
+  background: #7c3aed;
+  color: white;
+  border-color: #d4af37;
+}
+
+.next-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #7c3aed;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-button {
+  margin-top: 10px;
+  border: none;
+  background: none;
+  color: #888;
+  cursor: pointer;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #eee;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.progress-fill {
+  height: 6px;
+  background: #7c3aed;
+  border-radius: 4px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: #111827;
+  color: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 380px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.modal-description {
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-input {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 2px solid #374151; /* visible border */
+  background: #1f2937; /* dark input background */
+  color: white;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.modal-input::placeholder {
+  color: #9ca3af;
+}
+
+/* focus state */
+.modal-input:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.35);
+}
+
+.modal-primary-button {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #7c3aed;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-primary-button:hover {
+  background: #6d28d9;
+}
+
+.modal-primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-cancel-button {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+}

@@ -11,11 +11,16 @@ function EmailModal({ onSubmit, onClose, isLoading }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-card">
-        <div className="modal-title">Enter Your Email</div>
+      <div className="modal-card email-modal">
+        <h2 className="modal-title">🎯 Spin the Smart Wheel</h2>
 
-        <form onSubmit={handleSubmit}>
+        <p className="modal-description">
+          Enter your email to start the challenge.
+        </p>
+
+        <form onSubmit={handleSubmit} className="modal-form">
           <input
+            className="modal-input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -23,12 +28,18 @@ function EmailModal({ onSubmit, onClose, isLoading }) {
             required
           />
 
-          <button type="submit" disabled={isLoading}>
+          <button
+            className="modal-primary-button"
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading ? "Checking..." : "Continue"}
           </button>
         </form>
 
-        <button onClick={onClose}>Cancel</button>
+        <button className="modal-cancel-button" onClick={onClose}>
+          Cancel
+        </button>
       </div>
     </div>
   );
