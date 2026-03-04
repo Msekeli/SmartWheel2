@@ -13,26 +13,54 @@
   padding: 12px;
   border-radius: 8px;
   border: 2px solid #7c3aed;
-  background: white;
+  background: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.option-button:hover {
+  background: #f3f4f6;
 }
 
 .option-button.selected {
   background: #7c3aed;
   color: white;
+  border-color: #d4af37;
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
 }
 
 .next-button {
   margin-top: 20px;
   width: 100%;
   padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #7c3aed;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-button {
+  margin-top: 10px;
+  border: none;
+  background: none;
+  color: #888;
+  cursor: pointer;
 }
 
 .progress-bar {
   height: 6px;
   background: #eee;
+  border-radius: 4px;
+  margin-top: 10px;
 }
 
 .progress-fill {
   height: 6px;
   background: #7c3aed;
+  border-radius: 4px;
 }

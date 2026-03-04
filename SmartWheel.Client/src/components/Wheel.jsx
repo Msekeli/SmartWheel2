@@ -1,5 +1,12 @@
 import { Wheel } from "react-custom-roulette";
+import { useEffect, useRef } from "react";
 import "../styles/wheel.css";
+import "../styles/pointer.css";
+import "../styles/button.css";
+import "../styles/quiz.css";
+import "../styles/modal.css";
+
+// import tickSound from "../assets/sounds/tick.mp3";
 
 function RouletteWheel({
   onSpinClick,
@@ -21,10 +28,28 @@ function RouletteWheel({
       ? spinResult.wheelIndex
       : 0;
 
+  const tickAudio = useRef(null);
+  const tickInterval = useRef(null);
+
+  useEffect(() => {
+    if (shouldSpin) {
+      tickInterval.current = setInterval(() => {
+        if (tickAudio.current) {
+          tickAudio.current.currentTime = 0;
+          tickAudio.current.play().catch(() => {});
+        }
+      }, 120);
+    } else {
+      clearInterval(tickInterval.current);
+    }
+
+    return () => clearInterval(tickInterval.current);
+  }, [shouldSpin]);
+
   return (
     <div className="wheel-section">
       <div className="wheel-wrapper">
-        <div className="wheel-glow"></div>
+        <div className={`wheel-glow ${shouldSpin ? "spinning" : ""}`}></div>
 
         {/* Custom pointer */}
         <div className="custom-pointer"></div>
@@ -53,9 +78,16 @@ function RouletteWheel({
           fontSize={14}
           pointerProps={{ style: { display: "none" } }}
         />
+
+        {/* audio element */}
+        {/* <audio ref={tickAudio} src={tickSound} preload="auto" /> */}
       </div>
 
-      <button onClick={onSpinClick} className="spin-button">
+      <button
+        onClick={onSpinClick}
+        className="spin-button"
+        disabled={shouldSpin}
+      >
         Spin the Wheel
       </button>
     </div>
