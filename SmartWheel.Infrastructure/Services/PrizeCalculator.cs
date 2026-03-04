@@ -16,4 +16,18 @@ public sealed class PrizeCalculator : IPrizeCalculator
             _ => 0m
         };
     }
+
+    public int GetWheelIndex(decimal prizeAmount)
+    {
+        return prizeAmount switch
+        {
+            0m => 0,
+            5m => 1,
+            10m => 2,
+            25m => 3,
+            50m => 4,
+            100m => 5,
+            _ => 0
+        };
+    }
 }

@@ -12,7 +12,6 @@ public sealed class ProcessSpinUseCase
     private readonly IScoreCalculator _scoreCalculator;
     private readonly IPrizeCalculator _prizeCalculator;
 
-    
     public ProcessSpinUseCase(
         IUserRepository userRepository,
         ISpinHistoryRepository spinHistoryRepository,
@@ -29,52 +28,65 @@ public sealed class ProcessSpinUseCase
         SpinCommand command,
         CancellationToken cancellationToken = default)
     {
-          // 🔎 TEMP DEBUG START
-    if (command.Answers == null)
-        throw new Exception("Answers are NULL");
+        // TEMP DEBUG (helps confirm frontend answers)
+        if (command.Answers == null)
+            throw new Exception("Answers are NULL");
 
-    Console.WriteLine("Answers received:");
-    foreach (var a in command.Answers)
-    {
-        Console.WriteLine($"- {a}");
-    }
-    // 🔎 TEMP DEBUG END
-        var user = await _userRepository.GetByIdAsync(command.UserId, cancellationToken);
+        Console.WriteLine("Answers received:");
+        foreach (var a in command.Answers)
+        {
+            Console.WriteLine($"- {a}");
+        }
+
+        // Get user
+        var user = await _userRepository.GetByIdAsync(
+            command.UserId,
+            cancellationToken);
 
         if (user is null)
             throw new InvalidOperationException("User not found.");
 
         var utcNow = DateTime.UtcNow;
 
+        // Enforce 24-hour cooldown
         if (!user.CanSpin(utcNow))
             throw new InvalidOperationException("24-hour cooldown has not passed.");
 
-        // 1️⃣ Calculate score
+        // Calculate score
         var score = _scoreCalculator.Calculate(command.Answers);
 
-        // 2️⃣ Calculate prize
+        // Calculate prize
         var prizeAmount = _prizeCalculator.Calculate(score);
 
-        // 3️⃣ Update user balance + last spin
+        // Determine wheel index from prize
+        var wheelIndex = _prizeCalculator.GetWheelIndex(prizeAmount);
+
+        // Update user balance and last spin time
         user.ApplySpinResult(prizeAmount, utcNow);
 
-        // 4️⃣ Create spin history record
+        // Create spin history
         var spinHistory = SpinHistory.Create(
             user.Id,
             score,
             prizeAmount,
             utcNow);
 
-        // 5️⃣ Persist changes
-        await _spinHistoryRepository.AddAsync(spinHistory, cancellationToken);
-        await _userRepository.UpdateAsync(user, cancellationToken);
+        // Save history
+        await _spinHistoryRepository.AddAsync(
+            spinHistory,
+            cancellationToken);
 
-        // 6️⃣ Return result
+        // Update user
+        await _userRepository.UpdateAsync(
+            user,
+            cancellationToken);
+
+        // Return result to frontend
         return new SpinResult
         {
             Score = score,
             PrizeAmount = prizeAmount,
-            WheelIndex = score // temporary mapping (we refine later)
+            WheelIndex = wheelIndex
         };
     }
 }
